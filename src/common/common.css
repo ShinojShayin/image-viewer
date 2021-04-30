@@ -1,12 +1,16 @@
 a {
   text-decoration: none;
 }
+.dispHide {
+  visibility: hidden;
+}
 .dispNone {
   display: none;
 }
 
 .dispBlock {
   display: block;
+  visibility: visible;
 }
 
 .red {
