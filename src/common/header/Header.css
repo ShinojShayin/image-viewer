@@ -1,11 +1,7 @@
-.app-header {
-  background-color: #263238;
-  height: 55px;
-  display: flex;
-  align-items: center;
-  padding-left: 20px;
-}
 .logo-text {
   color: #fff;
   font-size: 18px;
+}
+#profile-popover {
+  top: -5px !important;
 }

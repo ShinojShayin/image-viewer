@@ -1,18 +1,34 @@
 import React, { Component } from "react";
 import "./Header.css";
+import { withStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import LoggedInTools from "./LoggedInTools";
+
+const styles = (theme) => ({
+  appHeader: {
+    backgroundColor: "#263238",
+    boxShadow: "none",
+  },
+});
 
 class Header extends Component {
-  //   constructor() {
-  //     super();
-  //   }
-
   render() {
+    const { classes } = this.props;
+
     return (
-      <header className="app-header">
-        <span className="logo-text">Image Viewer</span>
-      </header>
+      <AppBar className={classes.appHeader} position="static">
+        <Toolbar>
+          <Typography>
+            <span className="logo-text">Image Viewer</span>
+          </Typography>
+
+          {this.props.isloggedin === true && <LoggedInTools />}
+        </Toolbar>
+      </AppBar>
     );
   }
 }
 
-export default Header;
+export default withStyles(styles)(Header);

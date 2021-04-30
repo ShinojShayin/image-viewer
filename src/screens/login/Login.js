@@ -30,8 +30,8 @@ const styles = (theme) => ({
 });
 
 class Login extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       usernameRequired: "dispHide",
       username: "",
@@ -90,7 +90,7 @@ class Login extends Component {
     const { classes } = this.props;
     return (
       <div>
-        <Header />
+        <Header isloggedin={this.props.isloggedin} />
         <div className="loginbox">
           <Card className="card-container">
             <CardContent>
