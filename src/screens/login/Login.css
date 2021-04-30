@@ -1,0 +1,9 @@
+.card-container {
+  padding: 35px;
+}
+
+.loginbox {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
