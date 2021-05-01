@@ -7,6 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Popover from "@material-ui/core/Popover";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
+import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
   appHeader: {
@@ -87,57 +88,70 @@ class HeaderSearchAndProfile extends Component {
 
     return (
       <React.Fragment>
-        <div className={classes.searchContainer}>
-          <div className={classes.searchBox}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+        {this.props.page !== "profile" && (
+          <div className={classes.searchContainer}>
+            <div className={classes.searchBox}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                onChange={(e) => {
+                  this.props.searchHandler(e.target.value);
+                }}
+                placeholder="Search…"
+                classes={{
+                  input: classes.searchInput,
+                }}
+              />
             </div>
-            <InputBase
-              onChange={(e) => {
-                this.props.searchHandler(e.target.value);
-              }}
-              placeholder="Search…"
-              classes={{
-                input: classes.searchInput,
-              }}
+          </div>
+        )}
+
+        <div className="profle-container">
+          <IconButton
+            onClick={this.profileClickHandler}
+            className="float-right"
+          >
+            <Avatar
+              alt="Profile Pic"
+              src={this.props.profilepicture}
+              className={classes.avatar}
+              style={{ border: "1px solid #fff" }}
             />
-          </div>
+          </IconButton>
+
+          <Popover
+            id="profile-popover"
+            open={Boolean(this.state.anchorEl)}
+            onClose={this.handleClose}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+          >
+            <div className={classes.popover}>
+              {this.props.page === "home" && (
+                <React.Fragment>
+                  <Link to="/profile">
+                    <MenuItem>
+                      <Typography>My Account</Typography>
+                    </MenuItem>
+                  </Link>
+                  <div className={classes.divider} />
+                </React.Fragment>
+              )}
+
+              <MenuItem onClick={this.props.logoutCall}>
+                <Typography>Logout</Typography>
+              </MenuItem>
+            </div>
+          </Popover>
         </div>
-
-        <IconButton onClick={this.profileClickHandler}>
-          <Avatar
-            alt="Profile Pic"
-            src={this.props.profilepicture}
-            className={classes.avatar}
-            style={{ border: "1px solid #fff" }}
-          />
-        </IconButton>
-
-        <Popover
-          id="profile-popover"
-          open={Boolean(this.state.anchorEl)}
-          onClose={this.handleClose}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-        >
-          <div className={classes.popover}>
-            <MenuItem>
-              <Typography>My Account</Typography>
-            </MenuItem>
-            <div className={classes.divider} />
-
-            <MenuItem onClick={this.props.logoutCall}>
-              <Typography>Logout</Typography>
-            </MenuItem>
-          </div>
-        </Popover>
       </React.Fragment>
     );
   }

@@ -5,3 +5,9 @@
 #profile-popover {
   top: -5px !important;
 }
+.float-right {
+  float: right;
+}
+.profle-container {
+  float: right;
+}

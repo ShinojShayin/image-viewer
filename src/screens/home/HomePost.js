@@ -35,6 +35,7 @@ const styles = (theme) => ({
   },
   likeIcon: { fontSize: 30, cursor: "pointer" },
   likeIconClicked: { color: red[500], fontSize: 30, cursor: "pointer" },
+  commentuser: { margin: "0 0 10px 0" },
 });
 
 class HomePost extends Component {
@@ -54,6 +55,32 @@ class HomePost extends Component {
     });
   };
 
+  submitCommentHandler = (e, index, username) => {
+    let post = this.props.instagrampost[index];
+    var commentlist = this.state.tempcomment;
+    post.comments.push({ username: username, text: commentlist[index].text });
+    commentlist[index].text = "";
+    this.setState({
+      instagrampost: this.props.instagrampost,
+      tempcomment: commentlist,
+    });
+  };
+
+  commentTypeHandler = (e, index) => {
+    var commentlist = this.state.tempcomment;
+    commentlist[index] = { text: e.target.value };
+    this.setState({
+      tempcomment: commentlist,
+    });
+  };
+
+  constructor() {
+    super();
+    this.state = {
+      tempcomment: [],
+    };
+  }
+
   render() {
     let getTime = (postDate) => {
       let createdTime = new Date(postDate);
@@ -69,7 +96,7 @@ class HomePost extends Component {
       return dd + "/" + mm + "/" + yyyy + " " + HH + ":" + MM + ":" + ss;
     };
 
-    const { classes, item, comments } = this.props;
+    const { classes } = this.props;
 
     return (
       <React.Fragment>
@@ -96,29 +123,28 @@ class HomePost extends Component {
                   subheader={getTime(post.timestamp)}
                 />
                 <CardContent>
-                  <div>
-                    <img
-                      src={post.media_url}
-                      alt={post.media_url}
-                      className="post-img"
-                    />
-                  </div>
+                  <img
+                    src={post.media_url}
+                    alt={post.media_url}
+                    className="post-img"
+                  />
+
                   <div className="post-divider">
                     <Divider variant="fullWidth" />
                   </div>
-                  <div>
-                    {post.shortcaption && (
-                      <Typography className={classes.caption}>
-                        {post.shortcaption}
-                      </Typography>
-                    )}
 
-                    {post.hashtags !== "" && (
-                      <Typography className={classes.hashtags}>
-                        {post.hashtags}
-                      </Typography>
-                    )}
-                  </div>
+                  {post.shortcaption && (
+                    <Typography className={classes.caption}>
+                      {post.shortcaption}
+                    </Typography>
+                  )}
+
+                  {post.hashtags !== "" && (
+                    <Typography className={classes.hashtags}>
+                      {post.hashtags}
+                    </Typography>
+                  )}
+
                   <div className="post-icon-div">
                     {post.likeclicked ? (
                       <FavoriteIcon
@@ -134,6 +160,54 @@ class HomePost extends Component {
                     <Typography style={{ paddingLeft: 15 }}>
                       {post.likeCount} Likes
                     </Typography>
+                  </div>
+
+                  <div className="comment-div">
+                    {post.comments.length > 0
+                      ? post.comments.map((comment, i) => (
+                          <div
+                            key={"comment_user_" + index + "_" + i}
+                            className={classes.commentuser}
+                          >
+                            <b>{comment.username}:</b> {comment.text}
+                          </div>
+                        ))
+                      : ""}
+                  </div>
+
+                  <div>
+                    <FormControl
+                      style={{ marginRight: 10 }}
+                      className="comment-input"
+                    >
+                      <InputLabel htmlFor={"comment_" + index}>
+                        Add a comment
+                      </InputLabel>
+                      <Input
+                        type="input"
+                        value={
+                          this.state.tempcomment[index] &&
+                          this.state.tempcomment[index].text
+                            ? this.state.tempcomment[index].text
+                            : ""
+                        }
+                        onChange={(e) => {
+                          this.commentTypeHandler(e, index);
+                        }}
+                      />
+                    </FormControl>
+                    <FormControl style={{ verticalAlign: "bottom" }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={(e) => {
+                          this.submitCommentHandler(e, index, post.username);
+                          e.target.value = "";
+                        }}
+                      >
+                        ADD
+                      </Button>
+                    </FormControl>
                   </div>
                 </CardContent>
               </Card>

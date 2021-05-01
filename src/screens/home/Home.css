@@ -10,3 +10,12 @@
   margin-bottom: 10px;
   align-items: center;
 }
+
+.comment-div {
+  min-height: 50px;
+}
+
+.comment-input {
+  width: 80%;
+  margin-right: 10px;
+}
