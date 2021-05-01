@@ -57,7 +57,7 @@ const styles = (theme) => ({
   },
   divider: {
     height: "1px",
-    backgroundColor: "#8b8b8b",
+    backgroundColor: "#74747463",
   },
   avatar: {
     height: 40,
