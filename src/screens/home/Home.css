@@ -1,0 +1,12 @@
+.post-img {
+  width: 100%;
+}
+.post-divider {
+  margin: 10px 0;
+}
+
+.post-icon-div {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+}

@@ -65,7 +65,7 @@ const styles = (theme) => ({
   },
 });
 
-class LoggedInTools extends Component {
+class HeaderSearchAndProfile extends Component {
   constructor() {
     super();
     this.state = {
@@ -84,6 +84,7 @@ class LoggedInTools extends Component {
 
   render() {
     const { classes } = this.props;
+
     return (
       <React.Fragment>
         <div className={classes.searchContainer}>
@@ -106,7 +107,7 @@ class LoggedInTools extends Component {
         <IconButton onClick={this.profileClickHandler}>
           <Avatar
             alt="Profile Pic"
-            src={this.props.userProfileUrl}
+            src={this.props.profilepicture}
             className={classes.avatar}
             style={{ border: "1px solid #fff" }}
           />
@@ -127,14 +128,12 @@ class LoggedInTools extends Component {
           }}
         >
           <div className={classes.popover}>
-            <div>
-              <MenuItem>
-                <Typography>My Account</Typography>
-              </MenuItem>
-              <div className={classes.divider} />
-            </div>
-
             <MenuItem>
+              <Typography>My Account</Typography>
+            </MenuItem>
+            <div className={classes.divider} />
+
+            <MenuItem onClick={this.props.logoutCall}>
               <Typography>Logout</Typography>
             </MenuItem>
           </div>
@@ -144,4 +143,4 @@ class LoggedInTools extends Component {
   }
 }
 
-export default withStyles(styles)(LoggedInTools);
+export default withStyles(styles)(HeaderSearchAndProfile);

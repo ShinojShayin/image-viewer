@@ -1,0 +1,148 @@
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { Card, CardHeader } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
+import Grid from "@material-ui/core/Grid";
+import CardContent from "@material-ui/core/CardContent";
+import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+import Button from "@material-ui/core/Button";
+import { red } from "@material-ui/core/colors";
+
+const styles = (theme) => ({
+  card: {
+    maxWidth: 1100,
+  },
+  avatar: {
+    margin: 10,
+  },
+  girdContainer: {
+    width: "88%",
+    margin: "auto",
+    paddingTop: 10,
+  },
+  caption: {
+    fontSize: "15px",
+  },
+  hashtags: {
+    fontSize: "15px",
+    color: "#0ab7ff",
+  },
+  likeIcon: { fontSize: 30, cursor: "pointer" },
+  likeIconClicked: { color: red[500], fontSize: 30, cursor: "pointer" },
+});
+
+class HomePost extends Component {
+  likeClickHandler = (index) => {
+    let post = this.props.instagrampost[index];
+
+    if (post.likeclicked) {
+      post.likeclicked = false;
+      post.likeCount -= 1;
+    } else {
+      post.likeclicked = true;
+      post.likeCount += 1;
+    }
+
+    this.setState({
+      instagrampost: this.props.instagrampost,
+    });
+  };
+
+  render() {
+    let getTime = (postDate) => {
+      let createdTime = new Date(postDate);
+
+      let yyyy = createdTime.getFullYear();
+      let mm = createdTime.getMonth() + 1;
+      let dd = createdTime.getDate();
+
+      let HH = createdTime.getHours();
+      let MM = createdTime.getMinutes();
+      let ss = createdTime.getSeconds();
+
+      return dd + "/" + mm + "/" + yyyy + " " + HH + ":" + MM + ":" + ss;
+    };
+
+    const { classes, item, comments } = this.props;
+
+    return (
+      <React.Fragment>
+        {/* {JSON.stringify(this.props.instagrampost)} */}
+        <Grid
+          alignContent="center"
+          container
+          spacing={3}
+          justify="flex-start"
+          direction="row"
+          className={classes.girdContainer}
+        >
+          {this.props.instagrampost.map((post, index) => (
+            <Grid item xs={6} key={"grid_" + index}>
+              <Card key={"card_" + index}>
+                <CardHeader
+                  avatar={
+                    <Avatar
+                      variant="circular"
+                      src={this.props.profilepicture}
+                    />
+                  }
+                  title={post.username}
+                  subheader={getTime(post.timestamp)}
+                />
+                <CardContent>
+                  <div>
+                    <img
+                      src={post.media_url}
+                      alt={post.media_url}
+                      className="post-img"
+                    />
+                  </div>
+                  <div className="post-divider">
+                    <Divider variant="fullWidth" />
+                  </div>
+                  <div>
+                    {post.shortcaption && (
+                      <Typography className={classes.caption}>
+                        {post.shortcaption}
+                      </Typography>
+                    )}
+
+                    {post.hashtags !== "" && (
+                      <Typography className={classes.hashtags}>
+                        {post.hashtags}
+                      </Typography>
+                    )}
+                  </div>
+                  <div className="post-icon-div">
+                    {post.likeclicked ? (
+                      <FavoriteIcon
+                        className={classes.likeIconClicked}
+                        onClick={() => this.likeClickHandler(index)}
+                      />
+                    ) : (
+                      <FavoriteBorderIcon
+                        className={classes.likeIcon}
+                        onClick={() => this.likeClickHandler(index)}
+                      />
+                    )}
+                    <Typography style={{ paddingLeft: 15 }}>
+                      {post.likeCount} Likes
+                    </Typography>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </React.Fragment>
+    );
+  }
+}
+
+export default withStyles(styles)(HomePost);

@@ -8,6 +8,24 @@ class Controller extends Component {
     let token = sessionStorage.getItem("access-token");
     return !(token === "" || token == null);
   }
+
+  logoutHandler = () => {
+    sessionStorage.clear();
+    window.location.replace("/");
+  };
+
+  fetchData = (url, callback, httpmethod, extra) => {
+    let data = null;
+    let xhr = new XMLHttpRequest();
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        callback(JSON.parse(this.responseText), extra);
+      }
+    });
+    xhr.open(httpmethod, url);
+    xhr.send(data);
+  };
+
   render() {
     return (
       <Router>
@@ -23,7 +41,12 @@ class Controller extends Component {
             exact
             path="/home"
             render={(props) => (
-              <Home {...props} isloggedin={this.loggedInCheck()} />
+              <Home
+                {...props}
+                isloggedin={this.loggedInCheck()}
+                logoutCall={this.logoutHandler}
+                fetchData={this.fetchData}
+              />
             )}
           />
         </div>
