@@ -19,8 +19,12 @@ import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 
 class Profile extends Component {
-  constructor() {
-    super();
+  loggedInCheck(props) {
+    if (props.isloggedin !== true) props.history.push("/");
+  }
+
+  constructor(props) {
+    super(props);
     this.state = {
       showEditModal: false,
       showPostModal: false,
@@ -30,6 +34,7 @@ class Profile extends Component {
       post: {},
       tempcomment: [],
     };
+    this.loggedInCheck(props);
   }
   updateHandler = (e) => {
     if (this.state.userfullname.trim().length > 0) {
@@ -306,12 +311,18 @@ class Profile extends Component {
   submitCommentHandler = (index, username) => {
     let post = this.props.instagrampost[index];
     var commentlist = this.state.tempcomment;
-    post.comments.push({ username: username, text: commentlist[index].text });
-    commentlist[index].text = "";
-    this.setState({
-      instagrampost: this.props.instagrampost,
-      tempcomment: commentlist,
-    });
+    if (
+      commentlist[index] &&
+      commentlist[index].text &&
+      commentlist[index].text !== ""
+    ) {
+      post.comments.push({ username: username, text: commentlist[index].text });
+      commentlist[index].text = "";
+      this.setState({
+        instagrampost: this.props.instagrampost,
+        tempcomment: commentlist,
+      });
+    }
   };
 }
 
