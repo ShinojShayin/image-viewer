@@ -56,6 +56,7 @@ class HomePost extends Component {
     });
   };
 
+  // This method submit comment in homepage
   submitCommentHandler = (e, index, username) => {
     let post = this.props.instagrampost[index];
     var commentlist = this.state.tempcomment;

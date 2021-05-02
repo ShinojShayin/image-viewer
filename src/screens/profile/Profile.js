@@ -19,6 +19,7 @@ import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 
 class Profile extends Component {
+  // This method will redirect to login page if user is not loggedin
   loggedInCheck(props) {
     if (props.isloggedin !== true) props.history.push("/");
   }
@@ -36,6 +37,8 @@ class Profile extends Component {
     };
     this.loggedInCheck(props);
   }
+
+  // This method handle editing for user name in profile
   updateHandler = (e) => {
     if (this.state.userfullname.trim().length > 0) {
       this.props.userinfo.fullname = this.state.userfullname;
@@ -45,18 +48,24 @@ class Profile extends Component {
       this.setState({ fullnameRequired: "dispBlock" });
     }
   };
+
   fullnameHandler = (e) => {
     this.setState({ userfullname: e.target.value });
   };
+
   openEditModalHandler = () => {
     this.setState({ showEditModal: true });
   };
+
   closeEditModalHandler = () => {
     this.setState({ showEditModal: false });
   };
+
   closePostModalHandler = () => {
     this.setState({ showPostModal: false });
   };
+
+  // Opens individual post in modal in profile page
   openPostModalHandler = (index) => {
     let selectedPost = this.props.instagrampost[index];
     this.setState({
@@ -195,7 +204,7 @@ class Profile extends Component {
                   src={this.props.profilepicture}
                 />
 
-                <Typography variant="h7" className={classes.postModalUsername}>
+                <Typography variant="h6" className={classes.postModalUsername}>
                   {this.state.post.username}
                 </Typography>
               </div>
@@ -284,6 +293,7 @@ class Profile extends Component {
     );
   }
 
+  // On heart-shaped like button click this method is called
   likeClickHandler = (index) => {
     let post = this.props.instagrampost[index];
 
@@ -308,6 +318,7 @@ class Profile extends Component {
     });
   };
 
+  // Submits comment typed in profile page post-modal
   submitCommentHandler = (index, username) => {
     let post = this.props.instagrampost[index];
     var commentlist = this.state.tempcomment;

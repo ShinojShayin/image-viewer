@@ -4,10 +4,12 @@ import Header from "../../common/header/Header";
 import HomePost from "./HomePost";
 
 class Home extends Component {
+  // This method will redirect to login page if user is not loggedin
   loggedInCheck(props) {
     if (props.isloggedin !== true) props.history.push("/");
   }
 
+  // This method handles searching of post by caption in header search input box
   searchPostHandler = (value) => {
     let postList = this.props.instagrampost;
     if (!value || value === "") {
@@ -30,8 +32,6 @@ class Home extends Component {
     this.setState({
       instagrampost: postList,
     });
-
-    console.log(JSON.stringify(this.props.instagrampost));
   };
 
   constructor(props) {
@@ -40,6 +40,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    // This will set all post to show on home page when page loads
     this.searchPostHandler("");
   }
 
