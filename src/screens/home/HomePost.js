@@ -59,12 +59,18 @@ class HomePost extends Component {
   submitCommentHandler = (e, index, username) => {
     let post = this.props.instagrampost[index];
     var commentlist = this.state.tempcomment;
-    post.comments.push({ username: username, text: commentlist[index].text });
-    commentlist[index].text = "";
-    this.setState({
-      instagrampost: this.props.instagrampost,
-      tempcomment: commentlist,
-    });
+    if (
+      commentlist[index] &&
+      commentlist[index].text &&
+      commentlist[index].text !== ""
+    ) {
+      post.comments.push({ username: username, text: commentlist[index].text });
+      commentlist[index].text = "";
+      this.setState({
+        instagrampost: this.props.instagrampost,
+        tempcomment: commentlist,
+      });
+    }
   };
 
   commentTypeHandler = (e, index) => {

@@ -7,16 +7,19 @@ import instagramapi from "../common/config/instagramapi";
 import profilepic from "../assets/profilepic.png";
 
 class Controller extends Component {
+  // Check whether current session loggedin or not
   loggedInCheck() {
     let token = sessionStorage.getItem("access-token");
     return !(token === "" || token == null);
   }
 
+  // On-logout this method will clear session and redirect to login page
   logoutHandler = () => {
     sessionStorage.clear();
     window.location.replace("/");
   };
 
+  // This method load user post data user 2 instagram graph api endpoints
   loadInstagramData(that) {
     let instagramPost = [];
     let userInfo = { fullname: "Upgard Education", follows: 4, followers: 6 };
@@ -56,15 +59,18 @@ class Controller extends Component {
           .replace("{token}", token)
           .replace("{mediaid}", media.id);
 
+        // Second API Endpoint for Instagram Called here
         this.fetchData(mediaDetailsUrl, mediaDetailResponse, "GET", index);
       });
 
       userInfo.posts = mediaList["data"].length;
     };
 
+    // First API Endpoint for Instagram Called here
     this.fetchData(mediaListUrl, mediaListResponse, "GET");
   }
 
+  // This method is used for fetching url data and callback method is fired on successful request
   fetchData = (url, callback, httpmethod, extra) => {
     let data = null;
     let xhr = new XMLHttpRequest();

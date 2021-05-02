@@ -37,6 +37,9 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.loggedInCheck(props);
+  }
+
+  componentDidMount() {
     this.searchPostHandler("");
   }
 
