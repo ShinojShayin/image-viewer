@@ -40,6 +40,7 @@ class Controller extends Component {
       mediaDetail.likeclicked = false;
       mediaDetail.likeCount = randLikeCounter;
       mediaDetail.comments = [];
+      mediaDetail.show = true;
       instagramPost[index] = mediaDetail;
 
       that.setState({
@@ -61,58 +62,7 @@ class Controller extends Component {
       userInfo.posts = mediaList["data"].length;
     };
 
-    //  this.fetchData(mediaListUrl, mediaListResponse, "GET");
-    let dummyData = [
-      {
-        id: "17888128313076865",
-        media_type: "IMAGE",
-        media_url:
-          "https://scontent.cdninstagram.com/v/t51.29350-15/179834216_510244940155374_8709518673781617416_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=8ae9d6&_nc_ohc=Lj01QiD_maUAX8W6QNm&_nc_ht=scontent.cdninstagram.com&oh=9075702861e1735e5af4c9e0c6f45221&oe=60B19BB1",
-        username: "iiitb_shinoj",
-        timestamp: "2021-04-30T09:59:11+0000",
-        caption: "Post3 is a quote",
-        hashtags: "",
-        shortcaption: "Post3 is a quote",
-        likeclicked: false,
-        likeCount: 6,
-        comments: [],
-      },
-      {
-        id: "17881588511317467",
-        media_type: "IMAGE",
-        media_url:
-          "https://scontent.cdninstagram.com/v/t51.29350-15/178528904_128250822630819_8305680138891382163_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=8ae9d6&_nc_ohc=B518FfaQK-sAX_owgGF&_nc_ht=scontent.cdninstagram.com&oh=395a9e95c708c0c128154151c8e9233e&oe=60B36529",
-        username: "iiitb_shinoj",
-        timestamp: "2021-04-30T09:58:02+0000",
-        caption: "#maza Second post is a mango trophy #mangohai #masthai",
-        hashtags: "#maza #mangohai #masthai",
-        shortcaption: " Second post is a mango trophy",
-        likeclicked: false,
-        likeCount: 7,
-        comments: [],
-      },
-      {
-        id: "17904614599784191",
-        media_type: "IMAGE",
-        media_url:
-          "https://scontent.cdninstagram.com/v/t51.29350-15/177639852_275211150886642_4555143060469393267_n.jpg?_nc_cat=102&ccb=1-3&_nc_sid=8ae9d6&_nc_ohc=sQeKBSpWzsEAX-KnJOl&_nc_oc=AQmv3rjJVk23CwuyDvXAbu3SO1zRPozSo2JSz6sYRlJ8vsV4wE69w8wFa-7jOXVag_7YYkQfFjQjFL19G2w_nNsz&_nc_ht=scontent.cdninstagram.com&oh=ed6b10eda621e7adda1d523506d2af62&oe=60B4BA54",
-        username: "iiitb_shinoj",
-        timestamp: "2021-04-24T16:53:35+0000",
-        caption: "First post",
-        hashtags: "",
-        shortcaption: "First post",
-        likeclicked: false,
-        likeCount: 5,
-        comments: [],
-      },
-    ];
-
-    userInfo.posts = dummyData.length;
-    userInfo.username = dummyData[0].username;
-    that.setState({
-      instagrampost: dummyData,
-      userinfo: userInfo,
-    });
+    this.fetchData(mediaListUrl, mediaListResponse, "GET");
   }
 
   fetchData = (url, callback, httpmethod, extra) => {

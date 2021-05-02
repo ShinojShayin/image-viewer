@@ -207,7 +207,7 @@ class Profile extends Component {
                 </Typography>
               </div>
 
-              <div className="comment-div">
+              <div className="modal-comment-div">
                 {this.state.post.comments && this.state.post.comments.length > 0
                   ? this.state.post.comments.map((comment, i) => (
                       <div

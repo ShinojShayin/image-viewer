@@ -48,11 +48,12 @@
   margin-bottom: 15px;
 }
 
-.comment-div {
-  height: 220px;
-}
 .post-icon-div {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.modal-comment-div {
+  height: 220px;
 }

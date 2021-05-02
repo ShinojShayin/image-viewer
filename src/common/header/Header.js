@@ -36,7 +36,7 @@ class Header extends Component {
               logoutCall={this.props.logoutCall}
               profilepicture={this.props.profilepicture}
               page={this.props.page}
-              instagrampost={this.props.instagrampost}
+              searchPostHandler={this.props.searchPostHandler}
             />
           )}
         </Toolbar>

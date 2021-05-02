@@ -1,3 +1,7 @@
+.comment-div {
+  height: 90px;
+}
+
 .post-img {
   width: 100%;
 }
@@ -9,10 +13,6 @@
   display: flex;
   margin-bottom: 10px;
   align-items: center;
-}
-
-.comment-div {
-  min-height: 50px;
 }
 
 .comment-input {

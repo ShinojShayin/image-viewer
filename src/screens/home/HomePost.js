@@ -35,6 +35,8 @@ const styles = (theme) => ({
   likeIcon: { fontSize: 30, cursor: "pointer" },
   likeIconClicked: { color: "red", fontSize: 30, cursor: "pointer" },
   commentuser: { margin: "0 0 10px 0" },
+  postHeader: { padding: "16px 25px" },
+  postBody: { padding: "16px 25px" },
 });
 
 class HomePost extends Component {
@@ -85,12 +87,26 @@ class HomePost extends Component {
       let createdTime = new Date(postDate);
 
       let yyyy = createdTime.getFullYear();
-      let mm = createdTime.getMonth() + 1;
-      let dd = createdTime.getDate();
+      let mm = (createdTime.getMonth() + 1).toString().padStart(2, "0");
+      let dd = createdTime
+        .getDate()
+        .toString()
+        .padStart(2, "0");
 
-      let HH = createdTime.getHours();
-      let MM = createdTime.getMinutes();
-      let ss = createdTime.getSeconds();
+      let HH = createdTime
+        .getHours()
+        .toString()
+        .padStart(2, "0");
+
+      let MM = createdTime
+        .getMinutes()
+        .toString()
+        .padStart(2, "0");
+
+      let ss = createdTime
+        .getSeconds()
+        .toString()
+        .padStart(2, "0");
 
       return dd + "/" + mm + "/" + yyyy + " " + HH + ":" + MM + ":" + ss;
     };
@@ -108,110 +124,119 @@ class HomePost extends Component {
           direction="row"
           className={classes.girdContainer}
         >
-          {this.props.instagrampost.map((post, index) => (
-            <Grid item xs={6} key={"grid_" + index}>
-              <Card key={"card_" + index}>
-                <CardHeader
-                  avatar={
-                    <Avatar
-                      variant="circular"
-                      src={this.props.profilepicture}
+          {this.props.instagrampost.map(
+            (post, index) =>
+              post.show === true &&
+              post.media_type === "IMAGE" && (
+                <Grid item xs={6} key={"grid_" + index}>
+                  <Card key={"card_" + index}>
+                    <CardHeader
+                      avatar={
+                        <Avatar
+                          variant="circular"
+                          src={this.props.profilepicture}
+                        />
+                      }
+                      title={post.username}
+                      subheader={getTime(post.timestamp)}
+                      className={classes.postHeader}
                     />
-                  }
-                  title={post.username}
-                  subheader={getTime(post.timestamp)}
-                />
-                <CardContent>
-                  <img
-                    src={post.media_url}
-                    alt={post.media_url}
-                    className="post-img"
-                  />
-
-                  <div className="post-divider">
-                    <Divider variant="fullWidth" />
-                  </div>
-
-                  {post.shortcaption && (
-                    <Typography className={classes.caption}>
-                      {post.shortcaption}
-                    </Typography>
-                  )}
-
-                  {post.hashtags !== "" && (
-                    <Typography className={classes.hashtags}>
-                      {post.hashtags}
-                    </Typography>
-                  )}
-
-                  <div className="post-icon-div">
-                    {post.likeclicked ? (
-                      <FavoriteIcon
-                        className={classes.likeIconClicked}
-                        onClick={() => this.likeClickHandler(index)}
+                    <CardContent className={classes.postBody}>
+                      <img
+                        src={post.media_url}
+                        alt={post.media_url}
+                        className="post-img"
                       />
-                    ) : (
-                      <FavoriteBorderIcon
-                        className={classes.likeIcon}
-                        onClick={() => this.likeClickHandler(index)}
-                      />
-                    )}
-                    <Typography style={{ paddingLeft: 15 }}>
-                      {post.likeCount} Likes
-                    </Typography>
-                  </div>
 
-                  <div className="comment-div">
-                    {post.comments.length > 0
-                      ? post.comments.map((comment, i) => (
-                          <div
-                            key={"comment_user_" + index + "_" + i}
-                            className={classes.commentuser}
+                      <div className="post-divider">
+                        <Divider variant="fullWidth" />
+                      </div>
+
+                      {post.shortcaption && (
+                        <Typography className={classes.caption}>
+                          {post.shortcaption}
+                        </Typography>
+                      )}
+
+                      {post.hashtags !== "" && (
+                        <Typography className={classes.hashtags}>
+                          {post.hashtags}
+                        </Typography>
+                      )}
+
+                      <div className="post-icon-div">
+                        {post.likeclicked ? (
+                          <FavoriteIcon
+                            className={classes.likeIconClicked}
+                            onClick={() => this.likeClickHandler(index)}
+                          />
+                        ) : (
+                          <FavoriteBorderIcon
+                            className={classes.likeIcon}
+                            onClick={() => this.likeClickHandler(index)}
+                          />
+                        )}
+                        <Typography style={{ paddingLeft: 15 }}>
+                          {post.likeCount} Likes
+                        </Typography>
+                      </div>
+
+                      <div className="comment-div">
+                        {post.comments.length > 0
+                          ? post.comments.map((comment, i) => (
+                              <div
+                                key={"comment_user_" + index + "_" + i}
+                                className={classes.commentuser}
+                              >
+                                <b>{comment.username}:</b> {comment.text}
+                              </div>
+                            ))
+                          : ""}
+                      </div>
+
+                      <div>
+                        <FormControl
+                          style={{ marginRight: 10 }}
+                          className="comment-input"
+                        >
+                          <InputLabel htmlFor={"comment_" + index}>
+                            Add a comment
+                          </InputLabel>
+                          <Input
+                            type="input"
+                            value={
+                              this.state.tempcomment[index] &&
+                              this.state.tempcomment[index].text
+                                ? this.state.tempcomment[index].text
+                                : ""
+                            }
+                            onChange={(e) => {
+                              this.commentTypeHandler(e, index);
+                            }}
+                          />
+                        </FormControl>
+                        <FormControl style={{ verticalAlign: "bottom" }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={(e) => {
+                              this.submitCommentHandler(
+                                e,
+                                index,
+                                post.username
+                              );
+                              e.target.value = "";
+                            }}
                           >
-                            <b>{comment.username}:</b> {comment.text}
-                          </div>
-                        ))
-                      : ""}
-                  </div>
-
-                  <div>
-                    <FormControl
-                      style={{ marginRight: 10 }}
-                      className="comment-input"
-                    >
-                      <InputLabel htmlFor={"comment_" + index}>
-                        Add a comment
-                      </InputLabel>
-                      <Input
-                        type="input"
-                        value={
-                          this.state.tempcomment[index] &&
-                          this.state.tempcomment[index].text
-                            ? this.state.tempcomment[index].text
-                            : ""
-                        }
-                        onChange={(e) => {
-                          this.commentTypeHandler(e, index);
-                        }}
-                      />
-                    </FormControl>
-                    <FormControl style={{ verticalAlign: "bottom" }}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={(e) => {
-                          this.submitCommentHandler(e, index, post.username);
-                          e.target.value = "";
-                        }}
-                      >
-                        ADD
-                      </Button>
-                    </FormControl>
-                  </div>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+                            ADD
+                          </Button>
+                        </FormControl>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              )
+          )}
         </Grid>
       </React.Fragment>
     );

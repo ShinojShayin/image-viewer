@@ -96,7 +96,7 @@ class HeaderSearchAndProfile extends Component {
               </div>
               <InputBase
                 onChange={(e) => {
-                  this.props.searchHandler(e.target.value);
+                  this.props.searchPostHandler(e.target.value);
                 }}
                 placeholder="Search…"
                 classes={{
