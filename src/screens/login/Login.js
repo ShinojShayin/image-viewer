@@ -14,17 +14,12 @@ import Button from "@material-ui/core/Button";
 class Login extends Component {
   loginClickHandler = () => {
     // Following mock username and password used for login
+    // Long-Lived AccessToken is used for this app
     let username = "admin";
     let password = "admin";
-
-    /**
-     * Following accessToken (Created On: 29-04-2021) used for instagram api's,
-     * currently declared access-token is long-lived accesstoken which will last for 60 days
-     * */
-    // let accessToken =
-    //   "IGQVJWQVVtTnhxbGlOc0dMVlBwNlI0WkpXamg5aUdTbzdURnkxZAjBvVzhTeGN1ZATBkeEtSdzRxMGNfdWl4aVEyLWlsYTNESG1rUmdhMXRvWE9pRWlGbUdJRERWbWgyRDgxUGNTUzV3";
     let accessToken =
       "IGQVJYTWFZAdGtRby0yc2M2TXZAqNHRKV0xwMVJQSzdxUVNIalRWWjE2R016VVFWYzB5cE9uWTltMkZATNmlVYXJDUVFHVWd6dmp2NjJmQVBablM4LVBoMGE1eVlJRTdVSXMyWVhKUGp3OFlPNW5vaHVmUgZDZD";
+
     let isUserPresent = this.state.usernameInput === "";
     let isPasswordPresent = this.state.passwordInput === "";
 
@@ -35,13 +30,12 @@ class Login extends Component {
     isPasswordPresent
       ? this.setState({ loginPasswordRequired: "dispBlock" })
       : this.setState({ loginPasswordRequired: "dispNone" });
-
+    this.setState({ incorrectPassword: "dispNone" });
     if (!isUserPresent && !isPasswordPresent) {
       if (
         this.state.usernameInput === username &&
         this.state.passwordInput === password
       ) {
-        this.setState({ incorrectPassword: "dispNone" });
         sessionStorage.setItem("access-token", accessToken);
         window.location.replace("/home");
       } else {
