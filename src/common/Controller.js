@@ -19,7 +19,7 @@ class Controller extends Component {
 
   loadInstagramData(that) {
     let instagramPost = [];
-    let userInfo = { fullname: "Upgard Education", followed: 4, followers: 6 };
+    let userInfo = { fullname: "Upgard Education", follows: 4, followers: 6 };
     let token = sessionStorage.getItem("access-token");
     let mediaListUrl = instagramapi.medialist.replace("{token}", token);
     let randLikeCounter = 5;
@@ -164,7 +164,6 @@ class Controller extends Component {
                 fetchData={this.fetchData}
                 instagrampost={this.state.instagrampost}
                 profilepicture={profilepic}
-                loadInstagramData={this.loadInstagramData}
               />
             )}
           />
@@ -178,6 +177,7 @@ class Controller extends Component {
                 logoutCall={this.logoutHandler}
                 profilepicture={profilepic}
                 userinfo={this.state.userinfo}
+                instagrampost={this.state.instagrampost}
               />
             )}
           />

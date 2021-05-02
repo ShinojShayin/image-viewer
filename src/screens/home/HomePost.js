@@ -12,7 +12,6 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
-import { red } from "@material-ui/core/colors";
 
 const styles = (theme) => ({
   card: {
@@ -34,7 +33,7 @@ const styles = (theme) => ({
     color: "#0ab7ff",
   },
   likeIcon: { fontSize: 30, cursor: "pointer" },
-  likeIconClicked: { color: red[500], fontSize: 30, cursor: "pointer" },
+  likeIconClicked: { color: "red", fontSize: 30, cursor: "pointer" },
   commentuser: { margin: "0 0 10px 0" },
 });
 

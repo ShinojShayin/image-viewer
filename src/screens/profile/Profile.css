@@ -1,0 +1,58 @@
+.profile-head {
+  display: flex;
+  justify-content: center;
+  margin: 25px;
+  padding-right: 20%;
+}
+.profile-details {
+  padding-left: 6%;
+  padding-top: 1.7%;
+}
+.user-stats {
+  display: flex;
+  justify-content: space-between;
+  width: 500px;
+  margin-top: 8px;
+}
+.post-tiles {
+  margin: 50px 90px;
+}
+.post-tile-img {
+  cursor: pointer;
+}
+.post-modal-left {
+  padding-right: 15px;
+}
+
+.post-comment-form-control {
+  width: 310px;
+  margin-right: 10px;
+}
+
+.post-modal-right {
+  width: 50%;
+}
+.post-modal-img {
+  width: 400px;
+  height: auto;
+}
+
+.post-modal-right-header {
+  display: flex;
+}
+.header-divide {
+  margin: 10px 0;
+}
+
+.post-caption {
+  margin-bottom: 15px;
+}
+
+.comment-div {
+  height: 220px;
+}
+.post-icon-div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
