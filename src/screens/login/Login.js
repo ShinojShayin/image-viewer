@@ -18,7 +18,7 @@ class Login extends Component {
     let username = "admin";
     let password = "admin";
     let accessToken =
-      "IGQVJYTWFZAdGtRby0yc2M2TXZAqNHRKV0xwMVJQSzdxUVNIalRWWjE2R016VVFWYzB5cE9uWTltMkZATNmlVYXJDUVFHVWd6dmp2NjJmQVBablM4LVBoMGE1eVlJRTdVSXMyWVhKUGp3OFlPNW5vaHVmUgZDZD";
+      "IGQVJWQVVtTnhxbGlOc0dMVlBwNlI0WkpXamg5aUdTbzdURnkxZAjBvVzhTeGN1ZATBkeEtSdzRxMGNfdWl4aVEyLWlsYTNESG1rUmdhMXRvWE9pRWlGbUdJRERWbWgyRDgxUGNTUzV3";
 
     let isUserPresent = this.state.usernameInput === "";
     let isPasswordPresent = this.state.passwordInput === "";
@@ -37,7 +37,8 @@ class Login extends Component {
         this.state.passwordInput === password
       ) {
         sessionStorage.setItem("access-token", accessToken);
-        window.location.replace("/home");
+        // window.location.replace("/home");
+        this.props.history.push("/home");
       } else {
         this.setState({ incorrectPassword: "dispBlock" });
       }

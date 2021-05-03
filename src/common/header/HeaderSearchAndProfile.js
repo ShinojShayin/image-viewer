@@ -48,9 +48,8 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(4),
     transition: theme.transitions.create("width"),
-    width: "100%",
     [theme.breakpoints.up("sm")]: {
-      width: 120,
+      width: 300,
       "&:focus": {
         width: 200,
       },
@@ -67,12 +66,18 @@ const styles = (theme) => ({
 });
 
 class HeaderSearchAndProfile extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       anchorEl: null,
     };
   }
+
+  logoutHandler = () => {
+    sessionStorage.clear();
+    this.props.history.push("/");
+  };
+
   profileClickHandler = (obj) => {
     this.setState({
       anchorEl: obj.currentTarget,
@@ -146,7 +151,7 @@ class HeaderSearchAndProfile extends Component {
                 </React.Fragment>
               )}
 
-              <MenuItem onClick={this.props.logoutCall}>
+              <MenuItem onClick={this.logoutHandler}>
                 <Typography>Logout</Typography>
               </MenuItem>
             </div>

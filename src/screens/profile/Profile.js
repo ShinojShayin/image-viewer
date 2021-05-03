@@ -17,11 +17,79 @@ import GridListTile from "@material-ui/core/GridListTile";
 import Divider from "@material-ui/core/Divider";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import instagramapi from "../../common/config/instagramapi";
 
 class Profile extends Component {
   // This method will redirect to login page if user is not loggedin
   loggedInCheck(props) {
     if (props.isloggedin !== true) props.history.push("/");
+  }
+
+  // This method load user post data user 2 instagram graph api endpoints
+  loadInstagramData(that) {
+    let instagramPost = [];
+    let userinfo = this.props.userinfo;
+    let token = sessionStorage.getItem("access-token");
+    let mediaListUrl = instagramapi.medialist.replace("{token}", token);
+    let randLikeCounter = 5;
+    let mediaDetailResponse = (mediaDetail, index) => {
+      userinfo.username = mediaDetail.username;
+      if (mediaDetail.caption) {
+        mediaDetail.hashtags = mediaDetail.caption
+          .split(" ")
+          .filter((str) => str.startsWith("#"))
+          .join(" ");
+
+        mediaDetail.shortcaption = mediaDetail.caption.replace(
+          /(^|\s)#[a-zA-Z0-9][^\\p{L}\\p{N}\\p{P}\\p{Z}][\w-]*\b/g,
+          ""
+        );
+      }
+
+      var modifiedPostData = this.props.modifiedPostData[index];
+      mediaDetail.likeclicked =
+        modifiedPostData && modifiedPostData.likeclicked
+          ? modifiedPostData.likeclicked
+          : false;
+      mediaDetail.likeCount =
+        modifiedPostData && modifiedPostData.likeCount
+          ? modifiedPostData.likeCount
+          : randLikeCounter;
+      mediaDetail.comments =
+        modifiedPostData && modifiedPostData.comments
+          ? modifiedPostData.comments
+          : [];
+
+      mediaDetail.show = true;
+      instagramPost[index] = mediaDetail;
+
+      that.setState({
+        instagrampost: instagramPost,
+        userinfo: userinfo,
+      });
+      randLikeCounter++;
+    };
+
+    let mediaListResponse = (mediaList) => {
+      mediaList["data"].forEach((media, index) => {
+        let mediaDetailsUrl = instagramapi.mediadetails
+          .replace("{token}", token)
+          .replace("{mediaid}", media.id);
+
+        // Second API Endpoint for Instagram Called here
+        this.props.fetchData(
+          mediaDetailsUrl,
+          mediaDetailResponse,
+          "GET",
+          index
+        );
+      });
+
+      userinfo.posts = mediaList["data"].length;
+    };
+
+    // First API Endpoint for Instagram Called here
+    this.props.fetchData(mediaListUrl, mediaListResponse, "GET");
   }
 
   constructor(props) {
@@ -31,11 +99,16 @@ class Profile extends Component {
       showPostModal: false,
       fullnameRequired: "dispHide",
       userfullname: "",
-      postIndex: null,
+      postIndex: 0,
       post: {},
       tempcomment: [],
+      instagrampost: [],
     };
     this.loggedInCheck(props);
+  }
+
+  componentDidMount() {
+    if (this.props.isloggedin === true) this.loadInstagramData(this);
   }
 
   // This method handle editing for user name in profile
@@ -67,7 +140,7 @@ class Profile extends Component {
 
   // Opens individual post in modal in profile page
   openPostModalHandler = (index) => {
-    let selectedPost = this.props.instagrampost[index];
+    let selectedPost = this.state.instagrampost[index];
     this.setState({
       showPostModal: true,
       post: selectedPost,
@@ -82,10 +155,9 @@ class Profile extends Component {
         <Header
           isloggedin={this.props.isloggedin}
           page="profile"
-          logoutCall={this.props.logoutCall}
           profilepicture={this.props.profilepicture}
+          history={this.props.history}
         />
-
         <div className="profile-head">
           <Avatar
             variant="circular"
@@ -135,18 +207,21 @@ class Profile extends Component {
 
         <div className="post-tiles">
           <GridList cols={3} cellHeight={450}>
-            {this.props.instagrampost.map((post, index) => (
-              <GridListTile
-                onClick={() => this.openPostModalHandler(index)}
-                key={"tile_" + post.id}
-              >
-                <img
-                  src={post.media_url}
-                  alt={post.caption}
-                  className="post-tile-img"
-                />
-              </GridListTile>
-            ))}
+            {this.state.instagrampost.map(
+              (post, index) =>
+                post.media_type === "IMAGE" && (
+                  <GridListTile
+                    onClick={() => this.openPostModalHandler(index)}
+                    key={"tile_" + post.id}
+                  >
+                    <img
+                      src={post.media_url}
+                      alt={post.caption}
+                      className="post-tile-img"
+                    />
+                  </GridListTile>
+                )
+            )}
           </GridList>
         </div>
 
@@ -222,20 +297,26 @@ class Profile extends Component {
               </div>
 
               <div className="modal-comment-div">
-                {this.state.post.comments && this.state.post.comments.length > 0
-                  ? this.state.post.comments.map((comment, i) => (
-                      <div
-                        key={"comment_user_" + this.state.postIndex + "_" + i}
-                        className={classes.commentuser}
-                      >
-                        <b>{comment.username}:</b> {comment.text}
-                      </div>
-                    ))
+                {this.getModifiedPostData(this.state.postIndex) &&
+                this.getModifiedPostData(this.state.postIndex).comments &&
+                this.getModifiedPostData(this.state.postIndex).comments.length >
+                  0
+                  ? this.getModifiedPostData(this.state.postIndex).comments.map(
+                      (comment, i) => (
+                        <div
+                          key={"comment_user_" + this.state.postIndex + "_" + i}
+                          className={classes.commentuser}
+                        >
+                          <b>{comment.username}:</b> {comment.text}
+                        </div>
+                      )
+                    )
                   : ""}
               </div>
 
               <div className="post-icon-div">
-                {this.state.post.likeclicked ? (
+                {this.getModifiedPostData(this.state.postIndex) &&
+                this.getModifiedPostData(this.state.postIndex).likeclicked ? (
                   <FavoriteIcon
                     className={classes.likeIconClicked}
                     onClick={() => this.likeClickHandler(this.state.postIndex)}
@@ -247,7 +328,10 @@ class Profile extends Component {
                   />
                 )}
                 <Typography className={classes.likeText}>
-                  {this.state.post.likeCount} Likes
+                  {this.getModifiedPostData(this.state.postIndex) &&
+                    this.getModifiedPostData(this.state.postIndex)
+                      .likeCount}{" "}
+                  Likes
                 </Typography>
               </div>
 
@@ -293,9 +377,25 @@ class Profile extends Component {
     );
   }
 
+  getModifiedPostData = (index) => {
+    if (this.props.modifiedPostData[index]) {
+      return this.props.modifiedPostData[index];
+    } else {
+      return this.state.instagrampost[index];
+    }
+  };
+
+  saveModifiedData = (instagrampost, index) => {
+    let modifiedData = this.props.modifiedPostData;
+    modifiedData[index] = instagrampost[index];
+    this.setState({
+      modifiedPostData: this.props.modifiedPostData,
+    });
+  };
+
   // On heart-shaped like button click this method is called
   likeClickHandler = (index) => {
-    let post = this.props.instagrampost[index];
+    let post = this.state.instagrampost[index];
 
     if (post.likeclicked) {
       post.likeclicked = false;
@@ -304,9 +404,9 @@ class Profile extends Component {
       post.likeclicked = true;
       post.likeCount += 1;
     }
-
+    this.saveModifiedData(this.state.instagrampost, index);
     this.setState({
-      instagrampost: this.props.instagrampost,
+      instagrampost: this.state.instagrampost,
     });
   };
 
@@ -320,17 +420,18 @@ class Profile extends Component {
 
   // Submits comment typed in profile page post-modal
   submitCommentHandler = (index, username) => {
-    let post = this.props.instagrampost[index];
+    let post = this.state.instagrampost[index];
     var commentlist = this.state.tempcomment;
     if (
       commentlist[index] &&
       commentlist[index].text &&
-      commentlist[index].text !== ""
+      commentlist[index].text.trim() !== ""
     ) {
       post.comments.push({ username: username, text: commentlist[index].text });
       commentlist[index].text = "";
+      this.saveModifiedData(this.state.instagrampost, index);
       this.setState({
-        instagrampost: this.props.instagrampost,
+        instagrampost: this.state.instagrampost,
         tempcomment: commentlist,
       });
     }

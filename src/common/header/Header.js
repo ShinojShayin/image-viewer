@@ -37,6 +37,7 @@ class Header extends Component {
               profilepicture={this.props.profilepicture}
               page={this.props.page}
               searchPostHandler={this.props.searchPostHandler}
+              history={this.props.history}
             />
           )}
         </Toolbar>

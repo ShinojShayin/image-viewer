@@ -50,9 +50,25 @@ class HomePost extends Component {
       post.likeclicked = true;
       post.likeCount += 1;
     }
-
+    this.saveModifiedData(this.props.instagrampost, index);
     this.setState({
       instagrampost: this.props.instagrampost,
+    });
+  };
+
+  getModifiedPostData = (index) => {
+    if (this.props.modifiedPostData[index]) {
+      return this.props.modifiedPostData[index];
+    } else {
+      return this.props.instagrampost[index];
+    }
+  };
+
+  saveModifiedData = (instagrampost, index) => {
+    let modifiedData = this.props.modifiedPostData;
+    modifiedData[index] = instagrampost[index];
+    this.setState({
+      modifiedPostData: this.props.modifiedPostData,
     });
   };
 
@@ -63,10 +79,11 @@ class HomePost extends Component {
     if (
       commentlist[index] &&
       commentlist[index].text &&
-      commentlist[index].text !== ""
+      commentlist[index].text.trim() !== ""
     ) {
       post.comments.push({ username: username, text: commentlist[index].text });
       commentlist[index].text = "";
+      this.saveModifiedData(this.props.instagrampost, index);
       this.setState({
         instagrampost: this.props.instagrampost,
         tempcomment: commentlist,
@@ -82,8 +99,8 @@ class HomePost extends Component {
     });
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       tempcomment: [],
     };
@@ -172,7 +189,7 @@ class HomePost extends Component {
                       )}
 
                       <div className="post-icon-div">
-                        {post.likeclicked ? (
+                        {this.getModifiedPostData(index).likeclicked ? (
                           <FavoriteIcon
                             className={classes.likeIconClicked}
                             onClick={() => this.likeClickHandler(index)}
@@ -184,20 +201,22 @@ class HomePost extends Component {
                           />
                         )}
                         <Typography style={{ paddingLeft: 15 }}>
-                          {post.likeCount} Likes
+                          {this.getModifiedPostData(index).likeCount} Likes
                         </Typography>
                       </div>
 
                       <div className="comment-div">
-                        {post.comments.length > 0
-                          ? post.comments.map((comment, i) => (
-                              <div
-                                key={"comment_user_" + index + "_" + i}
-                                className={classes.commentuser}
-                              >
-                                <b>{comment.username}:</b> {comment.text}
-                              </div>
-                            ))
+                        {this.getModifiedPostData(index).comments.length > 0
+                          ? this.getModifiedPostData(index).comments.map(
+                              (comment, i) => (
+                                <div
+                                  key={"comment_user_" + index + "_" + i}
+                                  className={classes.commentuser}
+                                >
+                                  <b>{comment.username}:</b> {comment.text}
+                                </div>
+                              )
+                            )
                           : ""}
                       </div>
 
