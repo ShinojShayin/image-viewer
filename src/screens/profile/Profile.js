@@ -25,7 +25,7 @@ class Profile extends Component {
     if (props.isloggedin !== true) props.history.push("/");
   }
 
-  // This method load user post data user 2 instagram graph api endpoints
+  // This method loads user's instagram post data using 2 instagram graph API endpoints provided in upgrad assignment requirments
   loadInstagramData(that) {
     let instagramPost = [];
     let userinfo = this.props.userinfo;
